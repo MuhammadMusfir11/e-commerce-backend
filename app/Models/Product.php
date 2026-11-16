@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
     'category_id', 'name', 'slug', 'description',
-    'price', 'stock', 'image', 'is_active',
+    'price', 'old_price', 'stock', 'image', 'is_active', 'is_featured',
 ])]
 class Product extends Model
 {
@@ -19,8 +19,10 @@ class Product extends Model
     {
         return [
             'price' => 'integer',
+            'old_price' => 'integer',
             'stock' => 'integer',
             'is_active' => 'boolean',
+            'is_featured' => 'boolean',
         ];
     }
 
