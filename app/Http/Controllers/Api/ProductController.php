@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category')
+        $products = Product::with(['category', 'images'])
             ->where('is_active', true)
             ->when($request->query('category'), function ($query, $slug) {
                 $query->whereHas('category', fn ($c) => $c->where('slug', $slug));
@@ -29,7 +29,7 @@ class ProductController extends Controller
     {
         abort_if(! $product->is_active, 404);
 
-        return response()->json($product->load('category'));
+        return response()->json($product->load(['category', 'images']));
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
-        return response()->json($product->load('category'), 201);
+        return response()->json($product->load(['category', 'images']), 201);
     }
 
     public function update(Request $request, Product $product)
@@ -73,7 +73,7 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return response()->json($product->load('category'));
+        return response()->json($product->load(['category', 'images']));
     }
 
     public function destroy(Product $product)
