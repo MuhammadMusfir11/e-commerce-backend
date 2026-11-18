@@ -14,7 +14,7 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:6,
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{product}', [ProductController::class, 'show']);
+Route::get('/products/{product:slug}', [ProductController::class, 'show']);
 
 // Harus login
 Route::middleware('auth:sanctum')->group(function () {

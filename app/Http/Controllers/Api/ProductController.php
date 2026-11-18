@@ -19,8 +19,8 @@ class ProductController extends Controller
             ->when($request->query('search'), function ($query, $search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })
-            ->latest()
-            ->paginate(12);
+            ->orderBy('id')
+            ->get();
 
         return response()->json($products);
     }
@@ -39,9 +39,11 @@ class ProductController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'integer', 'min:0'],
+            'old_price' => ['nullable', 'integer', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'image' => ['nullable', 'string', 'max:2048'],
             'is_active' => ['boolean'],
+            'is_featured' => ['boolean'],
         ]);
 
         $data['slug'] = $this->makeSlug($data['name']);
@@ -58,9 +60,11 @@ class ProductController extends Controller
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['sometimes', 'required', 'integer', 'min:0'],
+            'old_price' => ['nullable', 'integer', 'min:0'],
             'stock' => ['sometimes', 'required', 'integer', 'min:0'],
             'image' => ['nullable', 'string', 'max:2048'],
             'is_active' => ['boolean'],
+            'is_featured' => ['boolean'],
         ]);
 
         if (isset($data['name'])) {
