@@ -54,6 +54,28 @@ class AuthController extends Controller
         ]);
     }
 
+    public function adminLogin(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $user = User::where('email', $data['email'])->first();
+
+        // Pesan sengaja sama untuk password salah dan akun non-admin
+        if (! $user || ! Hash::check($data['password'], $user->password) || $user->role !== 'admin') {
+            throw ValidationException::withMessages([
+                'email' => ['Email atau password salah.'],
+            ]);
+        }
+
+        return response()->json([
+            'user' => $user,
+            'token' => $user->createToken('admin_token')->plainTextToken,
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
